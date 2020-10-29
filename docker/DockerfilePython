@@ -1,0 +1,9 @@
+FROM python:3.7-alpine
+
+RUN mkdir app/
+WORKDIR app
+COPY requirement.txt app/
+COPY test_kafka.py app/
+RUN cd app/ & python3 -m pip install --requirement app/requirement.txt
+CMD echo "start populating data."
+CMD python3 app/test_kafka.py
