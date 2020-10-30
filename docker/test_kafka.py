@@ -4,9 +4,11 @@ from bloom_filter import BloomFilter
 import random
 from datetime import datetime
 import logging
-from faker import Faker
 
-logging.info('Begin to populate data.')
+
+logger = logging.getLogger('dev')
+logger.setLevel(logging.INFO)
+logger.info('Begin to populate data.')
 bloom_a = BloomFilter(max_elements=10000, error_rate=0.001)
 bloom_b = BloomFilter(max_elements=10000, error_rate=0.001)
 
@@ -18,7 +20,7 @@ db = client["competition"]
 rank_a_coll = db["user_rank_a"]
 rank_b_coll = db['user_rank_b']
 range_name = 10000
-logging.info('Start generating name.')
+logger.info('Start generating name.')
 while len(set_name) <= range_name:
     female = names.get_first_name(gender='female')
     male = names.get_first_name(gender='male')
@@ -26,10 +28,10 @@ while len(set_name) <= range_name:
     set_name.add(female)
     dict_gender[male] = 'male'
     dict_gender[female] = 'female'
-    logging.info('{} - {}'.format(male, female))
+    logger.info('{} - {}'.format(male, female))
 list_name = list(set_name)
-logging.info('Finish generating name.')
-logging.info('Start inserting data.')
+logger.info('Finish generating name.')
+logger.info('Start inserting data.')
 count = 0
 while count <= 2000000:
     index = random.randrange(range_name - 1, 0, -1)
@@ -54,6 +56,7 @@ while count <= 2000000:
         'server': 'b'
     }
     now = datetime.now()
+
     if name not in bloom_a:
         doc_a['created_time'] = now
         doc_a['updated_time'] = now
@@ -95,7 +98,7 @@ while count <= 2000000:
                     'amount': amount_b
                 }
             }).upserted_id
-    logging.info('{} - {} - {} - {} - {}'.format(count, a_id, b_id, amount_a, amount_b))
+    logger.info('{} - {} - {} - {} - {}'.format(count, a_id, b_id, amount_a, amount_b))
     count = count + 1
 
 client.close()
