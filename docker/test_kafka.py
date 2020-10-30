@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger('dev')
 logger.setLevel(logging.INFO)
-logger.info('Begin to populate data.')
+print('Begin to populate data.')
 bloom_a = BloomFilter(max_elements=10000, error_rate=0.001)
 bloom_b = BloomFilter(max_elements=10000, error_rate=0.001)
 
@@ -20,7 +20,7 @@ db = client["competition"]
 rank_a_coll = db["user_rank_a"]
 rank_b_coll = db['user_rank_b']
 range_name = 10000
-logger.info('Start generating name.')
+print('Start generating name.')
 while len(set_name) <= range_name:
     female = names.get_first_name(gender='female')
     male = names.get_first_name(gender='male')
@@ -28,10 +28,10 @@ while len(set_name) <= range_name:
     set_name.add(female)
     dict_gender[male] = 'male'
     dict_gender[female] = 'female'
-    logger.info('{} - {}'.format(male, female))
+    print('{} - {}'.format(male, female))
 list_name = list(set_name)
-logger.info('Finish generating name.')
-logger.info('Start inserting data.')
+print('Finish generating name.')
+print('Start inserting data.')
 count = 0
 while count <= 2000000:
     index = random.randrange(range_name - 1, 0, -1)
@@ -98,7 +98,7 @@ while count <= 2000000:
                     'amount': amount_b
                 }
             }).upserted_id
-    logger.info('{} - {} - {} - {} - {}'.format(count, a_id, b_id, amount_a, amount_b))
+    print('{} - {} - {} - {} - {}'.format(count, a_id, b_id, amount_a, amount_b))
     count = count + 1
 
 client.close()
