@@ -225,17 +225,17 @@ services:
     ports:
       - "27019:27017"
     restart: always
-  python_script:
-    build:
-      context: .
-      dockerfile: DockerfilePython
-    container_name: python_script
-    depends_on:
-      - mongo1
-      - mongo2
-      - mongo3
-    networks:
-      - localnet
+#  python_script:
+#    build:
+#      context: .
+#      dockerfile: DockerfilePython
+#    container_name: python_script
+#    depends_on:
+#      - mongo1
+#      - mongo2
+#      - mongo3
+#    networks:
+#      - localnet
 networks:
   localnet:
     attachable: true
