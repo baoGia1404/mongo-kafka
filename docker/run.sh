@@ -129,35 +129,6 @@ curl -X POST -H "Content-Type: application/json" --data '
      "collection":"pageviews"
 }}' http://localhost:8083/connectors -w "\n"
 sleep 2
-echo -e "\nAdding MongoDB Kafka Source Connector for the 'mongo-sample.sample' collection:"
-curl -X POST -H "Content-Type: application/json" --data '
-  {"name": "mongo-source-log-1",
-   "config": {
-     "tasks.max":"1",
-     "connector.class":"com.mongodb.kafka.connect.MongoSourceConnector",
-     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
-     "topic.prefix":"mongo-sample",
-     "database":"kafka_sample",
-     "collection":"sample"
-}}' http://localhost:8083/connectors -w "\n"
-
-sleep 5
-
-echo -e "\nAdding MongoDB Kafka Sink Connector for the 'kafka-sample' topic into the 'kafka-sample.sample-log' collection:"
-curl -X POST -H "Content-Type: application/json" --data '
-  {"name": "mongo-sink-log-1",
-   "config": {
-     "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
-     "tasks.max":"1",
-     "topics":"mongo-sample.kafka_sample.sample",
-     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
-     "database":"kafka_sample",
-     "collection":"sample-log",
-     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-     "value.converter.schemas.enable": "false"
-}}' http://localhost:8083/connectors -w "\n"
-sleep 2
 echo -e "\nKafka Connectors: \n"
 curl -X GET "http://localhost:8083/connectors/" -w "\n"
 
