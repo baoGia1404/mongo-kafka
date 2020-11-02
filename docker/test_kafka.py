@@ -19,7 +19,7 @@ client = pymongo.MongoClient("mongodb://localhost:27017")
 db = client["competition_monday"]
 rank_a_coll = db["user_rank_a"]
 rank_b_coll = db['user_rank_b']
-range_name = 3000
+range_name = 5000
 print('Start generating name.')
 while len(set_name) <= range_name:
     female = names.get_first_name(gender='female')
