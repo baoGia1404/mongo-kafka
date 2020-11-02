@@ -150,6 +150,8 @@ services:
   ksql-cli:
     image: confluentinc/cp-ksql-cli:latest
     container_name: ksql-cli
+    networks:
+      - localnet
     depends_on:
       - broker
       - connect
