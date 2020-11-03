@@ -37,55 +37,55 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-  broker1:
-    image: confluentinc/cp-enterprise-kafka:latest
-    hostname: broker1
-    container_name: broker1
-    depends_on:
-      - zookeeper
-    ports:
-      - "29093:29093"
-      - "9093:9093"
-    networks:
-      - localnet
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:29093,PLAINTEXT_HOST://localhost:9093
-      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker1:29093
-      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
-
-  broker2:
-    image: confluentinc/cp-enterprise-kafka:latest
-    hostname: broker2
-    container_name: broker2
-    depends_on:
-      - zookeeper
-    ports:
-      - "29094:29094"
-      - "9094:9094"
-    networks:
-      - localnet
-    environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:29094,PLAINTEXT_HOST://localhost:9094
-      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker2:29094
-      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+#  broker1:
+#    image: confluentinc/cp-enterprise-kafka:latest
+#    hostname: broker1
+#    container_name: broker1
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - "29093:29093"
+#      - "9093:9093"
+#    networks:
+#      - localnet
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:29093,PLAINTEXT_HOST://localhost:9093
+#      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+#      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker1:29093
+#      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+#      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+#      CONFLUENT_METRICS_ENABLE: 'true'
+#      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+#
+#  broker2:
+#    image: confluentinc/cp-enterprise-kafka:latest
+#    hostname: broker2
+#    container_name: broker2
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - "29094:29094"
+#      - "9094:9094"
+#    networks:
+#      - localnet
+#    environment:
+#      KAFKA_BROKER_ID: 2
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:29094,PLAINTEXT_HOST://localhost:9094
+#      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+#      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker2:29094
+#      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+#      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+#      CONFLUENT_METRICS_ENABLE: 'true'
+#      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   schema-registry:
     image: confluentinc/cp-schema-registry:latest
@@ -94,8 +94,8 @@ services:
     depends_on:
       - zookeeper
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
     ports:
       - "8081:8081"
     networks:
@@ -114,15 +114,15 @@ services:
     depends_on:
       - zookeeper
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
       - schema-registry
     ports:
       - "8083:8083"
     networks:
       - localnet
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: 'broker0:29092,broker1:29093,broker2:29094'
+      CONNECT_BOOTSTRAP_SERVERS: 'broker0:29092'
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: compose-connect-group
@@ -158,8 +158,8 @@ services:
     depends_on:
       - zookeeper
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
       - schema-registry
       - connect
       - ksql-server
@@ -168,7 +168,7 @@ services:
     networks:
       - localnet
     environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker0:29092,broker1:29093,broker2:29094'
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker0:29092'
       CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       CONTROL_CENTER_CONNECT_CLUSTER: 'connect:8083'
       CONTROL_CENTER_KSQL_URL: "http://ksql-server:8088"
@@ -186,8 +186,8 @@ services:
     container_name: ksql-server
     depends_on:
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
       - connect
     ports:
       - "8088:8088"
@@ -196,7 +196,7 @@ services:
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       KSQL_LOG4J_OPTS: "-Dlog4j.configuration=file:/etc/ksql/log4j-rolling.properties"
-      KSQL_BOOTSTRAP_SERVERS: "broker0:29092,broker1:29093,broker2:29094"
+      KSQL_BOOTSTRAP_SERVERS: "broker0:29092"
       KSQL_HOST_NAME: ksql-server
       KSQL_APPLICATION_ID: "cp-all-in-one"
       KSQL_LISTENERS: "http://0.0.0.0:8088"
@@ -212,8 +212,8 @@ services:
       - localnet
     depends_on:
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
       - connect
       - ksql-server
     entrypoint: /bin/sh
@@ -224,8 +224,8 @@ services:
     depends_on:
       - zookeeper
       - broker0
-      - broker1
-      - broker2
+#      - broker1
+#      - broker2
       - schema-registry
     ports:
       - 8082:8082
@@ -235,7 +235,7 @@ services:
       - localnet
     environment:
       KAFKA_REST_HOST_NAME: rest-proxy
-      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker0:29092,broker1:29093,broker2:29094'
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker0:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
