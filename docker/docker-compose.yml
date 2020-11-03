@@ -219,7 +219,9 @@ services:
     networks:
       - localnet
     depends_on:
-      - broker
+      - broker0
+      - broker1
+      - broker2
       - connect
       - ksql-server
     entrypoint: /bin/sh
